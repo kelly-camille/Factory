@@ -13,6 +13,6 @@ namespace Factory.Models
     public string MachineName { get; set; }
     public string Description { get; set; }
 
-    public virtual ICollection<EngineerMachine> JoinEntities { get;}
+    public virtual ICollection<EngineerMachine> JoinEntities { get; set; }
   }
 }

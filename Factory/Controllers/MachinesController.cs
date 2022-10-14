@@ -23,18 +23,18 @@ namespace Factory.Controllers
 
     public ActionResult Create()
     {
-      ViewBag.Engineerd = new SelectList(_db.Categories, "Engineerd", "Name");
+      ViewBag.Engineer = new SelectList(_db.Engineers, "Engineer", "Name");
       return View();
     }
 
     [HttpPost]
-    public ActionResult Create(Machine machine, int Engineerd)
+    public ActionResult Create(Machine machine, int EngineerId)
     {
       _db.Machines.Add(machine);
       _db.SaveChanges();
-      if (Engineerd != 0)
+      if (EngineerId != 0)
       {
-        _db.EngineerMachine.Add(new EngineerMachine() { Engineerd = Engineerd, MachineId = machine.MachineId });
+        _db.EngineerMachine.Add(new EngineerMachine() { EngineerId = EngineerId, MachineId = machine.MachineId });
         _db.SaveChanges();
       }
       return RedirectToAction("Index");
@@ -44,7 +44,7 @@ namespace Factory.Controllers
     {
       var thisMachine = _db.Machines
           .Include(machine => machine.JoinEntities)
-          .ThenInclude(join => join.Category)
+          .ThenInclude(join => join.Engineer)
           .FirstOrDefault(machine => machine.MachineId == id);
       return View(thisMachine);
     }
@@ -52,35 +52,35 @@ namespace Factory.Controllers
     public ActionResult Edit(int id)
     {
       var thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
-      ViewBag.Engineerd = new SelectList(_db.Categories, "Engineerd", "Name");
+      ViewBag.Engineer = new SelectList(_db.Engineers, "Engineer", "Name");
       return View(thisMachine);
     }
 
     [HttpPost]
-    public ActionResult Edit(Machine machine, int Engineerd)
+    public ActionResult Edit(Machine machine, int EngineerId)
     {
-      if (Engineerd != 0)
+      if (EngineerId != 0)
       {
-        _db.EngineerMachine.Add(new EngineerMachine() { Engineerd = Engineerd, MachineId = machine.MachineId });
+        _db.EngineerMachine.Add(new EngineerMachine() { EngineerId = EngineerId, MachineId = machine.MachineId });
       }
       _db.Entry(machine).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
-    public ActionResult AddCategory(int id)
+    public ActionResult AddEngineer(int id)
     {
       var thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
-      ViewBag.Engineerd = new SelectList(_db.Categories, "Engineerd", "Name");
+      ViewBag.Engineer = new SelectList(_db.Engineers, "Engineer", "Name");
       return View(thisMachine);
     }
 
     [HttpPost]
-    public ActionResult AddCategory(Machine machine, int Engineerd)
+    public ActionResult AddEngineer(Machine machine, int EngineerId)
     {
-      if (Engineerd != 0)
+      if (EngineerId != 0)
       {
-        _db.EngineerMachine.Add(new EngineerMachine() { Engineerd = Engineerd, MachineId = machine.MachineId });
+        _db.EngineerMachine.Add(new EngineerMachine() { EngineerId = EngineerId, MachineId = machine.MachineId });
         _db.SaveChanges();
       }
       return RedirectToAction("Index");
@@ -102,7 +102,7 @@ namespace Factory.Controllers
     }
 
     [HttpPost]
-    public ActionResult DeleteCategory(int joinId)
+    public ActionResult DeleteEngineer(int joinId)
     {
       var joinEntry = _db.EngineerMachine.FirstOrDefault(entry => entry.EngineerMachineId == joinId);
       _db.EngineerMachine.Remove(joinEntry);
